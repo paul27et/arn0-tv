@@ -8,7 +8,7 @@
     var NUMERIC_ID = /^\d{9,13}$/;
     var PRELOADED = [
         'org.tizen.netflix-app', 'org.tizen.primevideo', 'org.tizen.apple.apple-music',
-        'org.tizen.browser', 'com.samsung.tv.aria-video'
+        'org.tizen.browser', 'com.samsung.tv.knox-browser', 'com.samsung.tv.aria-video'
     ];
     var INTERNAL = [
         'adplatform.ADPlayer', 'WykOS4t4F0.cmsWebApp', '25emanual3.emanual',

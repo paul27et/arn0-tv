@@ -15,7 +15,9 @@ window.LAUNCHER_CONFIG = {
     apps: [
         { id: '9Ur5IzDKqV.TizenYouTube', label: 'YouTube', brand: 'youtube' },
         { id: 'Jz7aUrV2Q4.Twitch', label: 'Twitch' },
-        { id: 'com.samsung.tv.aria-video', label: 'Apple TV' }
+        { id: 'com.samsung.tv.aria-video', label: 'Apple TV' },
+        // Samsung Internet: knox-browser on the 2022 TV, org.tizen.browser in the preview mock
+        { match: '^(com\\.samsung\\.tv\\.knox-browser|org\\.tizen\\.browser)$', label: 'Internet' }
     ],
 
     // The soundbar sits on HDMI 3 (eARC) and gets no tile.
