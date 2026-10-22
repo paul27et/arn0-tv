@@ -23,8 +23,8 @@ window.LAUNCHER_CONFIG = {
 
     // The soundbar sits on HDMI 3 (eARC) and gets no tile.
     inputs: [
-        { hdmi: 4, label: 'PlayStation 5', brand: 'playstation' },
-        { hdmi: 1, label: 'Apple TV', brand: 'appletv' }
+        { hdmi: 1, label: 'PlayStation 5', brand: 'playstation' },
+        { hdmi: 2, label: 'Apple TV', brand: 'appletv' }
     ],
 
     // How an input tile switches the TV. See README "HDMI inputs".
