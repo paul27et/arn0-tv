@@ -1,5 +1,5 @@
 /*
- * Weather for the screen saver, from Open-Meteo. No API key, free for non-commercial use.
+ * Weather for Home and the screen saver, from Open-Meteo. No API key, free for non-commercial use.
  *
  * Coordinates come from js/config.js and default to null, which disables the widget entirely.
  * They are not a Settings page: the TV does not move, and nobody types coordinates with a remote.
@@ -133,6 +133,24 @@
         };
     }
 
+    // The week ahead for Home, today first; null under the same rules as current().
+    function forecast() {
+        if (!current() || !reading.days) return null;
+        var locale = Prefs.get().appearance.locale;
+        return reading.days.map(function (d) {
+            var ymd = d.date.split('-');
+            var date = new Date(+ymd[0], ymd[1] - 1, +ymd[2]);
+            return {
+                day: date.toLocaleDateString(locale, { weekday: 'short' }),
+                icon: icon(group(d.code)),
+                max: Math.round(d.max) + '°',
+                min: Math.round(d.min) + '°',
+                // Only worth a line when it is likely enough to change plans.
+                rain: typeof d.rain === 'number' && d.rain >= 20 ? d.rain + '%' : ''
+            };
+        });
+    }
+
     // ---------- Fetching
 
     function url() {
@@ -141,7 +159,8 @@
             '?latitude=' + encodeURIComponent(c.latitude) +
             '&longitude=' + encodeURIComponent(c.longitude) +
             '&current=temperature_2m,weather_code' +
-            '&daily=temperature_2m_max,temperature_2m_min' +
+            '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
+            '&forecast_days=7' +
             (c.unit === 'fahrenheit' ? '&temperature_unit=fahrenheit' : '') +
             '&timezone=auto';
     }
@@ -155,7 +174,16 @@
             temp: now.temperature_2m,
             code: typeof now.weather_code === 'number' ? now.weather_code : 3,
             max: day.temperature_2m_max[0],
-            min: day.temperature_2m_min[0]
+            min: day.temperature_2m_min[0],
+            days: (day.time || []).map(function (date, i) {
+                return {
+                    date: date,
+                    code: day.weather_code ? day.weather_code[i] : 3,
+                    max: day.temperature_2m_max[i],
+                    min: day.temperature_2m_min[i],
+                    rain: day.precipitation_probability_max ? day.precipitation_probability_max[i] : null
+                };
+            })
         };
         store();
         listeners.forEach(function (fn) { fn(); });
@@ -177,7 +205,8 @@
     // force: ignore both rules (the Lab entry, so a test does not wait an hour).
     function refresh(force) {
         if (!configured() || fetching) return;
-        if (!force && age() < FRESH_MS) return;
+        // A reading cached before the forecast existed has no days: fetch rather than wait an hour.
+        if (!force && age() < FRESH_MS && reading.days) return;
         if (!force && Date.now() - lastFailure < RETRY_MS) return;
         fetching = true;
         var xhr = new XMLHttpRequest();
@@ -216,8 +245,8 @@
         start: start,
         refresh: refresh,
         current: current,
+        forecast: forecast,
         configured: configured,
-        // Exposed so Home can reuse the same marks if weather ever moves there too.
         icon: icon,
         group: group,
         onUpdate: function (fn) { listeners.push(fn); },

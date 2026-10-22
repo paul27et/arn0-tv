@@ -17,9 +17,9 @@
                 preset: cfg.sound && cfg.sound.preset || 'soft'
             },
             wallpaper: {
-                mode: theme.wallpaper ? 'photo' : 'off',   // 'off' | 'photo' | 'rotate'
+                mode: theme.rotate ? 'rotate' : theme.wallpaper ? 'photo' : 'off',   // 'off' | 'photo' | 'rotate'
                 photo: theme.wallpaper || 'forest',
-                interval: '15m',        // see Wallpaper.INTERVALS
+                interval: theme.rotate || '15m',        // see Wallpaper.INTERVALS
                 lastChange: 0
             },
             screensaver: {

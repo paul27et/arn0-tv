@@ -16,7 +16,6 @@ window.LAUNCHER_CONFIG = {
         // TizenTube (ad-free); the official 9Ur5IzDKqV.TizenYouTube stays in All apps as a fallback
         { id: 'xvvl3S1TT1.TizenTubeStandalone', label: 'YouTube', brand: 'youtube' },
         { id: 'Jz7aUrV2Q4.Twitch', label: 'Twitch' },
-        { id: 'com.samsung.tv.aria-video', label: 'Apple TV' },
         // Samsung Internet: knox-browser on the 2022 TV, org.tizen.browser in the preview mock
         { match: '^(com\\.samsung\\.tv\\.knox-browser|org\\.tizen\\.browser)$', label: 'Internet' }
     ],
@@ -38,11 +37,13 @@ window.LAUNCHER_CONFIG = {
     theme: {
         // Starting wallpaper (key from js/wallpapers.js), or null for none (plain gradient).
         // Changed from Settings → Background; the TV remembers the choice.
-        wallpaper: null
+        wallpaper: 'moraine-lake',
+        // Rotate through all wallpapers at this interval (key from Wallpaper.INTERVALS), or null.
+        rotate: '5m'
     },
 
     /*
-     * Weather shown in the screen saver's corner, from Open-Meteo. No API key and nothing to
+     * Weather on Home and in the screen saver's corner, from Open-Meteo. No API key and nothing to
      * keep secret, so this is the whole setup: put your own coordinates here (two decimals is
      * plenty, and is also about as precise as you want a public request to be). Leave them null
      * and the widget never appears.

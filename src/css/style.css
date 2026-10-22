@@ -86,6 +86,19 @@ html, body {
     will-change: transform;
 }
 
+/* Second wallpaper layer for crossfades: only its opacity animates (see js/wallpaper.js). */
+#bg-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    background: center / cover no-repeat;
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity 1.2s ease-in-out;
+}
+
 .view {
     position: absolute;
     top: 0;
@@ -353,6 +366,91 @@ h1, h2 {
     background: var(--fg);
     color: var(--bg);
     transform: scale(1.08);
+}
+
+/* Weather: today beside the gear, the week below it. A flat translucent panel, no blur. */
+
+.home-weather {
+    position: absolute;
+    top: 100px;
+    right: var(--edge);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.hw-now {
+    display: flex;
+    align-items: center;
+    height: 76px;
+    margin-right: 108px;
+    gap: 14px;
+}
+
+.hw-now svg {
+    display: block;
+    width: 44px;
+    height: 48px;
+}
+
+.hw-temp {
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.hw-detail {
+    font-size: 28px;
+    color: var(--muted);
+}
+
+.hw-days {
+    display: flex;
+    margin-top: 8px;
+    padding: 10px 10px 4px;
+    border-radius: 22px;
+    background: rgba(9, 11, 16, 0.38);
+}
+
+.hw-day {
+    width: 92px;
+    text-align: center;
+}
+
+.hw-day-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.hw-day svg {
+    display: block;
+    width: 34px;
+    height: 37px;
+    margin: 4px auto 2px;
+}
+
+.hw-day-temp {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.hw-day-temp span {
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.hw-day-rain {
+    height: 22px;
+    font-size: 18px;
+    color: #7cc4ff;
+}
+
+.hw-credit {
+    margin-top: 4px;
+    margin-right: 12px;
+    font-size: 16px;
+    color: var(--faint);
 }
 
 /* ---------- Pages (everything except Home) ---------- */

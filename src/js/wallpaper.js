@@ -25,6 +25,27 @@
     }
 
     function bg() { return document.getElementById('bg'); }
+    function fader() { return document.getElementById('bg-fade'); }
+
+    // Crossfade: #bg-fade sits over #bg and only its opacity changes. Fading in shows the new
+    // photo on it; fading out reveals the new photo already placed on #bg underneath.
+    var fadeShown = false;
+
+    function crossfade(url) {
+        var top = fader();
+        if (!top) {
+            bg().style.backgroundImage = url;
+            return;
+        }
+        if (fadeShown) {
+            bg().style.backgroundImage = url;
+            top.style.opacity = '0';
+        } else {
+            top.style.backgroundImage = url;
+            top.style.opacity = '1';
+        }
+        fadeShown = !fadeShown;
+    }
 
     // The next image is decoded before it replaces the current one, so the screen never flashes empty.
     // No wallpaper falls back to the stylesheet's plain gradient (img/bg.jpg).
@@ -32,11 +53,13 @@
         var t = ++token;
         if (!w) {
             bg().style.backgroundImage = '';
+            if (fader()) fader().style.opacity = '0';
+            fadeShown = false;
             return;
         }
         var img = new Image();
         img.onload = function () {
-            if (t === token) bg().style.backgroundImage = 'url("' + w.file + '")';
+            if (t === token) crossfade('url("' + w.file + '")');
         };
         img.onerror = function () { DevLog.log('Wallpaper failed to load: ' + w.file); };
         img.src = w.file;

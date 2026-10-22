@@ -328,6 +328,33 @@
         $('time-main').textContent = t.time;
         $('time-suffix').textContent = t.suffix;
         $('date').textContent = Appearance.date(d);
+        renderWeather();
+    }
+
+    // Today beside the gear, the week below. Runs with the clock (so a stale reading disappears)
+    // and only touches the DOM when the text actually changed.
+    var weatherHtml = null;
+
+    function renderWeather() {
+        var now = window.Weather && Weather.current();
+        var days = now && Weather.forecast();
+        var html = '';
+        if (now) {
+            html = '<div class="hw-now">' + now.icon +
+                '<span class="hw-temp">' + now.temp + '</span>' +
+                '<span class="hw-detail">' + now.detail + '</span></div>';
+            if (days) {
+                html += '<div class="hw-days">' + days.map(function (d) {
+                    return '<div class="hw-day"><div class="hw-day-name">' + d.day + '</div>' + d.icon +
+                        '<div class="hw-day-temp">' + d.max + ' <span>' + d.min + '</span></div>' +
+                        '<div class="hw-day-rain">' + d.rain + '</div></div>';
+                }).join('') + '</div><div class="hw-credit">Weather: Open-Meteo</div>';
+            }
+        }
+        if (html === weatherHtml) return;
+        weatherHtml = html;
+        $('home-weather').innerHTML = html;
+        $('home-weather').classList.toggle('hidden', !html);
     }
 
     // The TV takes ~4 s to list its ~450 apps, so Home is drawn from the last list we saw
@@ -464,6 +491,7 @@
         else renderHome();
         UI.show('home');
         Wallpaper.start();
+        if (window.Weather) Weather.onUpdate(renderWeather);
 
         document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
@@ -473,6 +501,7 @@
             updateClock();
             refreshInputStatus();
             if (UI.isVisible('home')) Wallpaper.homeShown();
+            if (window.Weather) Weather.refresh();
             if (Date.now() - state.lastFetch > REFRESH_AFTER_MS) setTimeout(loadApps, 1500);
         });
         // With a cache, let the first frames and key presses through before the slow app list.
