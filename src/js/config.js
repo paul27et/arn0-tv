@@ -13,7 +13,8 @@
  */
 window.LAUNCHER_CONFIG = {
     apps: [
-        { id: '9Ur5IzDKqV.TizenYouTube', label: 'YouTube', brand: 'youtube' },
+        // TizenTube (ad-free); the official 9Ur5IzDKqV.TizenYouTube stays in All apps as a fallback
+        { id: 'xvvl3S1TT1.TizenTubeStandalone', label: 'YouTube', brand: 'youtube' },
         { id: 'Jz7aUrV2Q4.Twitch', label: 'Twitch' },
         { id: 'com.samsung.tv.aria-video', label: 'Apple TV' },
         // Samsung Internet: knox-browser on the 2022 TV, org.tizen.browser in the preview mock
